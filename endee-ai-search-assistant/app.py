@@ -8,6 +8,7 @@ import openai
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+# Title
 st.title("Endee AI Knowledge Assistant")
 
 # Upload files
@@ -15,7 +16,7 @@ uploaded_files = st.file_uploader("Upload PDF or TXT", accept_multiple_files=Tru
 
 documents = []
 
-# Read files
+# Read uploaded files
 if uploaded_files:
     for file in uploaded_files:
         if file.name.endswith(".pdf"):
@@ -28,27 +29,45 @@ if uploaded_files:
         elif file.name.endswith(".txt"):
             documents.append(file.read().decode("utf-8"))
 
-# Ask question
-query = st.text_input("Ask a question")
+# Form (Enter + Button works)
+with st.form("form"):
+    query = st.text_input("Ask a question")
+    submit = st.form_submit_button("Submit")
 
-if query and documents:
+# Process
+if submit:
+    if not documents:
+        st.warning("Please upload a file first")
 
-    relevant = []
-    for doc in documents:
-        if query.lower() in doc.lower():
-            relevant.append(doc)
+    elif not query:
+        st.warning("Please enter a question")
 
-    if not relevant:
-        relevant = documents[:2]
+    else:
+        # Simple search
+        relevant = []
+        for doc in documents:
+            if query.lower() in doc.lower():
+                relevant.append(doc)
 
-    context = " ".join(relevant)[:3000]
+        if not relevant:
+            relevant = documents[:2]
 
-    response = openai.ChatCompletion.create(
-        model="gpt-4o-mini",
-        messages=[
-            {"role": "user", "content": f"Answer using this context:\n{context}\n\nQuestion: {query}"}
-        ]
-    )
+        context = " ".join(relevant)[:3000]
 
-    st.write("### Answer:")
-    st.write(response.choices[0].message.content)
+        # AI response
+        try:
+            response = openai.ChatCompletion.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {
+                        "role": "user",
+                        "content": f"Answer using this context:\n{context}\n\nQuestion: {query}"
+                    }
+                ]
+            )
+
+            st.write("Answer:")
+            st.write(response.choices[0].message.content)
+
+        except Exception as e:
+            st.error(e)
