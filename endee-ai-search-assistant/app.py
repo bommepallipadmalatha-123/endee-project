@@ -1,30 +1,54 @@
 import streamlit as st
 import os
 from dotenv import load_dotenv
-from endee import Endee
+from PyPDF2 import PdfReader
+import openai
 
-# Load env
+# Load API key
 load_dotenv()
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
-ENDEE_API_KEY = os.getenv("ENDEE_API_KEY")
+st.title("Endee AI Knowledge Assistant")
 
-# Initialize Endee
-client = Endee(token=ENDEE_API_KEY)
+# Upload files
+uploaded_files = st.file_uploader("Upload PDF or TXT", accept_multiple_files=True)
 
-# UI
-st.title("Endee AI Search Assistant")
+documents = []
 
-query = st.text_input("Enter your query:")
+# Read files
+if uploaded_files:
+    for file in uploaded_files:
+        if file.name.endswith(".pdf"):
+            pdf = PdfReader(file)
+            text = ""
+            for page in pdf.pages:
+                text += page.extract_text() or ""
+            documents.append(text)
 
-if query:
-    st.write("Your Query:", query)
+        elif file.name.endswith(".txt"):
+            documents.append(file.read().decode("utf-8"))
 
-    # TEMPORARY response (to avoid crash)
-    st.info("Processing with Endee...")
+# Ask question
+query = st.text_input("Ask a question")
 
-    try:
-        # Just checking connection (safe call)
-        st.success("Connected to Endee successfully!")
+if query and documents:
 
-    except Exception as e:
-        st.error(f"Error: {e}")
+    relevant = []
+    for doc in documents:
+        if query.lower() in doc.lower():
+            relevant.append(doc)
+
+    if not relevant:
+        relevant = documents[:2]
+
+    context = " ".join(relevant)[:3000]
+
+    response = openai.ChatCompletion.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "user", "content": f"Answer using this context:\n{context}\n\nQuestion: {query}"}
+        ]
+    )
+
+    st.write("### Answer:")
+    st.write(response.choices[0].message.content)
