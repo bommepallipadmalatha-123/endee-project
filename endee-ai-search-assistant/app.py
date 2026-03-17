@@ -1,20 +1,26 @@
 import streamlit as st
-from openai import OpenAI
 
-# ✅ put key inside quotes
-client = OpenAI(api_key="sk-proj-xxxxxxxxxxxxxxxx")
+st.title("🤖 Endee AI Search Assistant")
 
-st.title("AI Assistant")
+# Input
+query = st.text_input("Ask a question:")
 
-query = st.text_input("Ask:")
-
+# Button
 if st.button("Submit"):
-    if query:
-        try:
-            response = client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[{"role": "user", "content": query}]
-            )
-            st.write(response.choices[0].message.content)
-        except Exception as e:
-            st.write("Error:", e)
+    if not query:
+        st.warning("Please enter a question")
+    else:
+        st.write("### Answer:")
+
+        # Simple demo AI logic
+        if "ai" in query.lower():
+            st.write("Artificial Intelligence is the simulation of human intelligence by machines.")
+
+        elif "machine learning" in query.lower():
+            st.write("Machine Learning is a subset of AI that allows systems to learn from data.")
+
+        elif "python" in query.lower():
+            st.write("Python is a programming language used for web development, AI, and data science.")
+
+        else:
+            st.write("This is a demo response. The system can be extended with real AI using APIs.")
