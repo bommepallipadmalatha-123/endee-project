@@ -1,33 +1,23 @@
+# app.py
+from endee import Endee
 import streamlit as st
-from sentence_transformers import SentenceTransformer
-import endee
+import os
+from dotenv import load_dotenv
 
-# Load model
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# Load API keys from .env
+load_dotenv()
+ENDEE_API_KEY = os.getenv("ENDEE_API_KEY")
 
-# Initialize DB
-db = endee.Client()
+# Initialize Endee client
+client = Endee(token=ENDEE_API_KEY)
 
-st.title("AI Search Assistant using Endee")
+# Streamlit interface
+st.title("Endee AI Search Assistant")
+query = st.text_input("Enter your query:")
 
-# Load sample data
-with open("data/sample.txt", "r") as file:
-    data = file.readlines()
-
-# Store data button
-if st.button("Store Data"):
-    for line in data:
-        embedding = model.encode(line).tolist()
-        db.insert({"text": line, "vector": embedding})
-    st.success("Data stored successfully!")
-
-# Query
-query = st.text_input("Ask a question")
-
-if st.button("Search"):
-    query_embedding = model.encode(query).tolist()
-    results = db.search(query_embedding, top_k=3)
-
+if query:
+    # Perform a semantic search
+    results = client.search(query=query, top_k=5)  # top_k is number of results
     st.write("Results:")
-    for r in results:
-        st.write(r["text"])
+    for i, res in enumerate(results):
+        st.write(f"{i+1}. {res['text']}")
