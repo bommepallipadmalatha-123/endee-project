@@ -1,0 +1,4 @@
+Python is a programming language.
+Java is used for backend development.
+Machine Learning is part of AI.
+Streamlit is used to build web apps
