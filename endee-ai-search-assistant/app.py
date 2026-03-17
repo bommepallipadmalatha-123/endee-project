@@ -8,7 +8,8 @@ from openai import OpenAI
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-st.title("Endee AI Search Assistant")
+# Title
+st.title("🤖 Endee AI Search Assistant")
 
 # Upload files
 uploaded_files = st.file_uploader("Upload PDF or TXT", accept_multiple_files=True)
@@ -28,32 +29,47 @@ if uploaded_files:
         elif file.name.endswith(".txt"):
             documents.append(file.read().decode("utf-8"))
 
-# Form (fix Enter issue)
+# Form (Enter + button works)
 with st.form("form"):
     query = st.text_input("Ask a question")
     submit = st.form_submit_button("Submit")
 
-# Generate Answer
+# Answer generation (ALWAYS gives output)
 if submit:
-    if not documents:
-        st.warning("Upload file first")
-    elif not query:
-        st.warning("Enter question")
+    if not query:
+        st.warning("Please enter a question")
+
     else:
-        # Simple retrieval
-        context = " ".join(documents)[:3000]
+        # If documents exist → use them
+        if documents:
+            context = " ".join(documents)[:3000]
+            prompt = f"""
+You are an AI assistant.
+
+Answer using the context below.
+If answer is not in context, still answer generally.
+
+Context:
+{context}
+
+Question:
+{query}
+"""
+        else:
+            # No documents → general answer
+            prompt = query
 
         try:
             response = client.chat.completions.create(
                 model="gpt-4o-mini",
                 messages=[
-                    {"role": "user", "content": f"Answer using this context:\n{context}\n\nQuestion: {query}"}
+                    {"role": "user", "content": prompt}
                 ]
             )
 
             answer = response.choices[0].message.content
 
-            st.write("### Answer:")
+            st.write("### ✅ Answer:")
             st.write(answer)
 
         except Exception as e:
