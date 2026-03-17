@@ -1,23 +1,30 @@
 # app.py
-from endee import Endee
 import streamlit as st
 import os
 from dotenv import load_dotenv
+from endee import Endee
 
-# Load API keys from .env
+# Load environment variables
 load_dotenv()
+
+# Get API key
 ENDEE_API_KEY = os.getenv("ENDEE_API_KEY")
 
-# Initialize Endee client
+# Initialize Endee
 client = Endee(token=ENDEE_API_KEY)
 
-# Streamlit interface
+# UI
 st.title("Endee AI Search Assistant")
+
 query = st.text_input("Enter your query:")
 
 if query:
-    # Perform a semantic search
-    results = client.search(query=query, top_k=5)  # top_k is number of results
-    st.write("Results:")
-    for i, res in enumerate(results):
-        st.write(f"{i+1}. {res['text']}")
+    try:
+        # Correct method (generic safe call)
+        response = client.query(query)
+
+        st.write("Response:")
+        st.write(response)
+
+    except Exception as e:
+        st.error(f"Error: {e}")
