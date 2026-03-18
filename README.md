@@ -1,38 +1,38 @@
 🚀 Endee AI Search Assistant
 
-Live Demo
+🌐 Live Demo
 
 An AI-powered Search Assistant built using the Endee Vector Database, designed to perform intelligent semantic search and retrieve relevant information efficiently.
 
 📌 Overview
 
-Endee AI Search Assistant is a smart application that leverages vector embeddings and semantic search to provide accurate and context-aware results.
+Endee AI Search Assistant leverages vector embeddings and semantic search to provide accurate and context-aware results.
 
 Unlike traditional keyword-based search systems, this assistant understands the meaning behind queries, delivering more relevant and precise results from your datasets.
 
 🎯 Features
 
-🔍 Semantic Search (AI-based) – Understands user intent, not just keywords
+🔍 Semantic Search (AI-based) – Understands user intent
 
-⚡ Fast Retrieval – Powered by Endee Vector Database for efficient searches
+⚡ Fast Retrieval – Powered by Endee Vector Database
 
-🧠 Context-aware Results – Maintains query context for better answers
+🧠 Context-aware Results – Maintains query context
 
-📂 Custom Dataset Support – Easily integrate your own data for search
+📂 Custom Dataset Support – Integrate your own data
 
-🌐 User-friendly Interface – Built with Streamlit for simplicity and speed
+🌐 User-friendly Interface – Built with Streamlit
 
-🔗 Seamless Integration – Works directly with Endee Vector DB and OpenAI embeddings
+🔗 Seamless Integration – Works with Endee Vector DB and OpenAI embeddings
 
 🛠️ Tech Stack
 
-Python – Core application language
+Python
 
-Endee Vector Database – Stores embeddings and performs fast semantic searches
+Endee Vector Database
 
-Streamlit – Frontend interface (CLI support optional)
+Streamlit
 
-OpenAI Embedding Models – Generates semantic embeddings from text
+OpenAI Embedding Models
 
 ⚙️ Installation & Setup
 
@@ -54,11 +54,9 @@ Run the app
 
 streamlit run app.py
 
-Access in Browser
+Access the app
 
-Open your browser and go to: http://localhost:8501
-
-Or use the Live Streamlit Demo
+Click here: 🌐 Open Endee AI Search Assistant
 
 🗂️ Usage
 
@@ -68,17 +66,8 @@ Generate embeddings via OpenAI models
 
 Query your dataset using natural language questions
 
-Receive context-aware semantic search results instantly
+Receive context-aware semantic search results
 
-🔧 Folder Structure
-endee-ai-search-assistant/
-│
-├─ app.py              # Main Streamlit application
-├─ requirements.txt    # Python dependencies
-├─ README.md           # Project documentation
-├─ data/               # Custom dataset storage
-├─ utils/              # Helper functions (embedding, search)
-└─ config/             # Configuration files
 💡 Future Enhancements
 
 Multi-modal support (images, audio, video)
