@@ -1,6 +1,6 @@
 🚀 Endee AI Search Assistant
 
-🌐 Live Demo
+🌐 Live Demo : https://bommepallipadmalatha-123-en-endee-ai-search-assistantapp-9sylea.streamlit.app/
 
 An AI-powered Search Assistant built using the Endee Vector Database, designed to perform intelligent semantic search and retrieve relevant information efficiently.
 
